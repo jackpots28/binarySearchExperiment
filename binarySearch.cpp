@@ -1,11 +1,14 @@
 
 #include "stdafx.h"
+#include <stdlib.h>
+#include <time.h>
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
-//binarysearch that allows for other data types
+// binarysearch that allows for other data types
 template <class genType>
 struct searchFunctions{
 	static genType genBinSrch(vector<genType>gVec, int leftVec, int rightVec, genType Srch) {
@@ -25,8 +28,8 @@ struct searchFunctions{
 }; 
 
 
-//binarysearch function using only integers
-int binarySearch(vector<int>vec, int lVec, int rVec, int searchFor) {
+// binarysearch function using only integers
+long binarySearch(vector<long>vec, int lVec, int rVec, long searchFor) {
 	if (rVec >= 1) {
 		int middle = (lVec + rVec) / 2;
 
@@ -43,38 +46,76 @@ int binarySearch(vector<int>vec, int lVec, int rVec, int searchFor) {
 
 
 int main() {
-	vector<int>testVecInt;
-	vector<char>testCharVec;
+	srand(time(NULL));
+	long counter = 0;
+	bool flag = true;
 
-	for (int i = 0; i <= 20; i++) {
-		testVecInt.push_back(i);
-	}
+	vector<long>testVecInt;
+	// vector<char>testCharVec;
 
-	for (char j = 'a'; j <= 's'; j++) {
-		testCharVec.push_back(j -1);
+	// fills vector with random #'s between 0 -> 200000
+	for (int i = 0; i <= 100; i++) {
+		testVecInt.push_back(rand() % 10 + 1);
 	}
+	sort(testVecInt.begin(), testVecInt.end());
+	
+	for (int x = 0; x < testVecInt.size(); x++) {
+		cout << testVecInt.at(x) << " ";
+	}
+	cout << endl;
+	/*
+	// fills vector with chars from a to z
+	for (char j = 'a'; j <= 'z'; j++) {
+		testCharVec.push_back(j);
+	}
+	*/
 
 	int resultInt = 0;
-	int resultChar = 0;
+	// int resultChar = 0;
 
 	int searchedValInt;
-	char searchChar;
+	// char searchChar;
 
 	cout << "Enter an integer to search for: ";
 	cin >> searchedValInt;
 
+	/*
 	cout << "Enter a character to search for: ";
 	cin >> searchChar;
-
 	cout << endl;
+	*/
 
 	int sizeOfIntVec = testVecInt.size();
-	int sizeOfCharVec = testCharVec.size();
+	// int sizeOfCharVec = testCharVec.size();
 	
+	
+	// Does count the full amount when last index value is searched for, but
+	// has an out of memory error thrown at the end
+	while(flag){
+		resultInt = binarySearch(testVecInt, 0, sizeOfIntVec, searchedValInt);
 
-	//Binary search using just a vector of integers
-	resultInt = binarySearch(testVecInt, 0, sizeOfIntVec, searchedValInt);
+		if (resultInt != -1) {
 		
+			counter++;
+			testVecInt.at(resultInt) = -1;
+			sort(testVecInt.begin(), testVecInt.end());
+			/*
+			for (int i = 0; i < testVecInt.size(); ++i) {
+				cout << testVecInt.at(i) << " ";
+			}
+			*/
+			cout << endl;
+			cout << counter << endl;
+		}
+		else if (resultInt == -1) {
+			flag = false;
+		}
+		
+	}
+
+	// cout << "The vector contains: " << counter << " instances of number: " << searchedValInt << endl;
+
+	/*
 	if (resultInt == -1) {
 		cout << "Value not found in vector." << endl;
 	}
@@ -82,9 +123,9 @@ int main() {
 		cout << "Value found at index: " << resultInt << endl;
 	
 	
-	//Implemented a template class type so that it could be used to search vectors
-	//of other data types
-	resultChar = searchFunctions<char>::genBinSrch(testCharVec, 0, sizeOfCharVec -1, searchChar);
+	// Implemented a template class type so that it could be used to search vectors
+	// of other data types
+	resultChar = searchFunctions<char>::genBinSrch(testCharVec, 0, sizeOfCharVec, searchChar);
 		
 	if (resultChar == -1) {
 		cout << "Value not found in vector of chars."
@@ -92,7 +133,7 @@ int main() {
 	}
 	else
 		cout << "Value found at index: " << resultChar << endl;
-
+	*/
 
     return 0;
 }
